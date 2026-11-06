@@ -1,6 +1,3 @@
-[index.html](https://github.com/user-attachments/files/34458863/index.html)
-# fuji-2026
-FUJI 2026
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
