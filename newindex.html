@@ -1,1 +1,1232 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FUJI / 26 — EXPEDITION BLUEPRINT & FIELD MANUAL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f2ee;
+      --paper: #faf9f6;
+      --ink: #121212;
+      --sub: #5e5d59;
+      --mute: #96948e;
+      --red: #e63329;
+      --line: rgba(18, 18, 18, 0.13);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* 瑞士細線網格基礎架構 (Technique #2) */
+    .grid-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+    .b-bottom { border-bottom: 1px solid var(--line); }
+    .b-top { border-top: 1px solid var(--line); }
+    .mono-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sub);
+    }
+    .red-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: var(--red);
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    /* 1. 頂部工程儀表導覽列 (Technique #1) */
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(243, 242, 238, 0.92);
+      backdrop-filter: blur(8px);
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 11.5px;
+    }
+    .topbar > div, .topbar > nav {
+      padding: 12px 18px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .topbar nav a {
+      color: var(--sub);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .topbar nav a:hover { color: var(--red); }
+    .top-cta {
+      background: var(--red);
+      color: #fff;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+    }
+    .top-cta:hover { background: var(--ink); }
+
+    /* 2. 首屏工程素描藍圖 + 浮動觀測標記 (Technique #1 & #2) */
+    .hero-blueprint {
+      position: relative;
+      height: 520px;
+      background:
+        linear-gradient(to right, rgba(18,18,18,0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+        linear-gradient(to bottom, rgba(18,18,18,0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+        var(--bg);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .hero-svg-scene {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    /* 浮動工程測量框 (Callout HUD Boxes) */
+    .hud-callout {
+      position: absolute;
+      background: rgba(250, 249, 246, 0.94);
+      border: 1px solid var(--ink);
+      padding: 8px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      box-shadow: 4px 4px 0 rgba(18,18,18,0.08);
+      z-index: 5;
+    }
+    .hud-callout .val { font-weight: 700; color: var(--red); font-size: 12.5px; }
+    .hud-1 { top: 14%; left: 10%; }
+    .hud-2 { top: 20%; left: 44%; }
+    .hud-3 { top: 16%; right: 9%; }
+
+    .hero-caption-bar {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-caption-left {
+      padding: 28px 32px;
+      border-right: 1px solid var(--line);
+    }
+    .hero-caption-left h1 {
+      font-size: clamp(28px, 3.6vw, 48px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      text-transform: uppercase;
+    }
+    .hero-caption-right {
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--sub);
+    }
+
+    /* 3. 日本赤日幾何視覺 + 4 欄式數據儀表板 (Technique #2 & #3) */
+    .sun-split-section {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .sun-art-box {
+      position: relative;
+      min-height: 380px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--paper);
+    }
+    .rising-sun {
+      width: 210px;
+      height: 210px;
+      background: var(--red);
+      border-radius: 50%;
+      position: absolute;
+      top: 16%;
+      right: 18%;
+      transition: transform 0.6s ease;
+    }
+    .sun-art-box:hover .rising-sun { transform: scale(1.08); }
+    .sun-copy-box {
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+    }
+    .sun-copy-box h2 {
+      font-size: clamp(24px, 2.6vw, 36px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    /* 4-Column KPI Spec Bar */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .kpi-cell {
+      padding: 24px 26px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .kpi-cell:last-child { border-right: none; }
+    .kpi-num {
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+    .kpi-num small {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--mute);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    /* 5. 三欄式 01~07 行程切換器 (Technique #5 — 影片最核心互動！) */
+    .section-title-bar {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      padding: 36px 32px;
+      border-bottom: 1px solid var(--line);
+      align-items: end;
+    }
+    .section-title-bar h2 {
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    .tri-stage {
+      display: grid;
+      grid-template-columns: 270px 1.25fr 1fr;
+      border-bottom: 1px solid var(--line);
+      min-height: 540px;
+    }
+    /* 左欄：01~07 選單 */
+    .tri-nav {
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+    }
+    .tri-tab {
+      flex: 1;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      border-left: none; border-top: none; border-right: none;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: var(--mute);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.18s;
+    }
+    .tri-tab:last-child { border-bottom: none; }
+    .tri-tab:hover { background: rgba(0,0,0,0.03); color: var(--ink); }
+    .tri-tab.active {
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .tri-tab .dot-ind {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: transparent;
+      margin-right: 8px;
+      display: inline-block;
+    }
+    .tri-tab.active .dot-ind { background: var(--red); }
+
+    /* 中欄：視覺時間軸與浮動黑底數據盒 */
+    .tri-visual {
+      border-right: 1px solid var(--line);
+      padding: 28px;
+      background: #181818;
+      color: #f3f2ee;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tri-timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .tl-row {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .tl-time {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #ffcf5a;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tl-body h4 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .tl-body p { font-size: 12.5px; color: #b5b3ad; }
+    .tl-map {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 4px 9px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tl-map:hover { background: var(--red); border-color: var(--red); }
+
+    /* 右欄：巨大空心描邊數字 01~07 + 戰術指令 */
+    .tri-detail {
+      padding: 36px 32px;
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .outline-num {
+      font-family: var(--mono);
+      font-size: clamp(72px, 7.5vw, 112px);
+      font-weight: 700;
+      line-height: 0.9;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(18, 18, 18, 0.28);
+      margin-bottom: 18px;
+      user-select: none;
+    }
+    .tri-detail h3 {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .tri-detail p {
+      font-size: 13.5px;
+      color: var(--sub);
+      margin-bottom: 16px;
+    }
+    .red-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .red-tag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--red);
+      background: rgba(230, 51, 41, 0.08);
+      border: 1px solid rgba(230, 51, 41, 0.25);
+      padding: 3px 8px;
+    }
+    .action-btn {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink);
+      background: transparent;
+      border: 1px solid var(--ink);
+      padding: 9px 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .action-btn:hover { background: var(--ink); color: #fff; }
+
+    /* 6. 六宮格工程線條 Bento 卡 (Technique #6) */
+    .bento-6-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+    .bento-cell {
+      padding: 28px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 250px;
+      transition: background 0.2s;
+    }
+    .bento-cell:nth-child(3n) { border-right: none; }
+    .bento-cell:nth-child(n+4) { border-bottom: none; }
+    .bento-cell:hover { background: var(--paper); }
+    .bento-svg { width: 100%; height: 95px; margin: 10px 0; }
+    .bento-cell h4 {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .bento-cell p { font-size: 12.5px; color: var(--sub); }
+
+    /* 7. 全螢幕互動路線雷達圖 (Technique #7 — Live Span Map) */
+    .live-map-box {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      border-bottom: 1px solid var(--line);
+      min-height: 420px;
+    }
+    .span-sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .span-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      transition: background 0.15s;
+    }
+    .span-item:hover, .span-item.active {
+      background: #121212;
+      color: #fff;
+    }
+    .span-badge {
+      padding: 2px 6px;
+      font-size: 10px;
+      background: rgba(230, 51, 41, 0.12);
+      color: var(--red);
+      border: 1px solid rgba(230, 51, 41, 0.3);
+    }
+    .span-canvas {
+      position: relative;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(230,51,41,0.08), transparent 45%),
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+        #141414;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .floating-span-card {
+      position: relative;
+      z-index: 3;
+      background: rgba(18, 18, 18, 0.92);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 20px 24px;
+      max-width: 420px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+    .floating-span-card .big-metric {
+      font-family: var(--mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffcf5a;
+    }
+
+    /* 8. 墨田慶生 Bistro & 名店「反黑矩陣」(Technique #8 — Invert Matrix) */
+    .invert-matrix-section {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .matrix-left {
+      padding: 36px 32px;
+      border-right: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .matrix-tile {
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 145px;
+      transition: all 0.18s ease;
+    }
+    .matrix-tile:nth-child(2n) { border-right: none; }
+    .matrix-tile:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+    .matrix-tile:hover .mono-tag { color: #ffcf5a; }
+
+    /* 9. 單邊紅塊手風琴折疊問答 & 檢核表 (Technique #9 — Red-Square Accordion) */
+    .faq-section {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .faq-left {
+      padding: 40px 32px;
+      border-right: 1px solid var(--line);
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      width: 100%;
+      padding: 20px 24px;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .faq-btn-box {
+      width: 26px; height: 26px;
+      border: 1px solid var(--line);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 14px;
+      transition: all 0.18s;
+    }
+    .faq-item.open .faq-btn-box {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+    .faq-a {
+      display: none;
+      padding: 0 24px 20px 24px;
+      font-size: 13.5px;
+      color: var(--sub);
+      line-height: 1.65;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* 10. 頁尾超大空心描邊字 Hover 逐字變紅 (Technique #10 — Interactive Stencil Footer) */
+    footer.stencil-footer {
+      padding: 40px 20px 24px;
+      background: var(--bg);
+      text-align: center;
+      overflow: hidden;
+    }
+    .giant-word {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: clamp(46px, 11.5vw, 168px);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      user-select: none;
+      cursor: crosshair;
+    }
+    .giant-word span {
+      color: transparent;
+      -webkit-text-stroke: 1.8px rgba(18, 18, 18, 0.25);
+      transition: color 0.12s ease, -webkit-text-stroke 0.12s ease, transform 0.15s ease;
+      display: inline-block;
+    }
+    .giant-word span:hover, .giant-word span.lit {
+      color: var(--red);
+      -webkit-text-stroke: 1.8px var(--red);
+      transform: translateY(-4px);
+    }
+
+    @media (max-width: 920px) {
+      header.topbar { grid-template-columns: 1fr auto; }
+      header.topbar nav, .topbar .coords-hide { display: none; }
+      .hero-caption-bar, .sun-split-section, .tri-stage, .live-map-box, .invert-matrix-section, .faq-section {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .bento-6-grid { grid-template-columns: 1fr; }
+      .hud-callout { font-size: 9.5px; padding: 5px 8px; }
+      .hud-2 { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-wrap">
+  <!-- ==================== 1. 頂部工程導覽列 (Technique #1) ==================== -->
+  <header class="topbar">
+    <div>
+      <a href="#" class="brand-logo"><span class="red-dot"></span>FUJI_EXPEDITION.26</a>
+    </div>
+    <nav>
+      <a href="#chronology">01 / 七日作戰切換</a>
+      <a href="#bento-tools">02 / 六大實戰圖解</a>
+      <a href="#live-map">03 / 跨縣市路網雷達</a>
+      <a href="#bistro-matrix">04 / 墨田慶生與美食</a>
+      <a href="#faq-check">05 / 檢核與應變</a>
+    </nav>
+    <div class="coords-hide">35°30′N 138°45′E · ELEV 830M</div>
+    <a href="#chronology" class="top-cta">12.11 → 12.17</a>
+  </header>
+
+  <!-- ==================== 2. 首屏：富士山×東京×日光 工程藍圖與動態 HUD (Technique #1) ==================== -->
+  <section class="hero-blueprint">
+    <div class="hud-callout hud-1">
+      <div><span class="red-dot"></span>BASE 01 · ASAKUSA / SUMIDA</div>
+      <div class="val">12.11 B-DAY BISTRO &amp; LOCK CODE</div>
+    </div>
+    <div class="hud-callout hud-2">
+      <div><span class="red-dot"></span>TARGET · KAWAGUCHIKO 17K</div>
+      <div class="val" id="live-temp">TEMP -1.8°C · WIND 4.2m/s</div>
+    </div>
+    <div class="hud-callout hud-3">
+      <div><span class="red-dot"></span>EXT · NIKKO &amp; UTSUNOMIYA</div>
+      <div class="val">12.15–17 STUDLESS TIRES REQ</div>
+    </div>
+
+    <!-- 工程測繪風 SVG：東京鐵塔 ➔ 富士山等高線 ➔ 日光鳥居與高壓線構圖 -->
+    <svg class="hero-svg-scene" viewBox="0 0 1400 460" preserveAspectRatio="xMidYMax slice">
+      <!-- 遠景富士山等高線 -->
+      <path d="M260,420 Q560,360 660,110 L740,110 Q840,360 1140,420" fill="none" stroke="rgba(18,18,18,0.18)" stroke-width="1.5"/>
+      <path d="M330,420 Q580,370 672,150 L728,150 Q820,370 1070,420" fill="none" stroke="rgba(18,18,18,0.12)" stroke-dasharray="4 4"/>
+      <!-- 紅色測量拋物線 (呼應影片高壓紅線) -->
+      <path d="M120,240 Q410,360 700,110 Q990,360 1280,210" fill="none" stroke="#e63329" stroke-width="1.8"/>
+      <circle cx="700" cy="110" r="5" fill="#e63329"/>
+      <circle cx="120" cy="240" r="4" fill="#e63329"/>
+      <circle cx="1280" cy="210" r="4" fill="#e63329"/>
+      <!-- 左側：東京塔架結構 -->
+      <g stroke="#121212" stroke-width="1.2" fill="none">
+        <path d="M90,420 L120,210 L150,420 M100,350 L140,350 M108,290 L132,290 M95,385 L145,350 M145,385 L95,350"/>
+        <!-- 右側：日光東照宮鳥居工程圖 -->
+        <path d="M1240,420 L1240,210 M1320,420 L1320,210 M1220,210 L1340,210 M1230,235 L1330,235"/>
+      </g>
+      <!-- 地面基準線 -->
+      <line x1="0" y1="420" x2="1400" y2="420" stroke="#121212" stroke-width="2"/>
+    </svg>
+  </section>
+
+  <div class="hero-caption-bar">
+    <div class="hero-caption-left">
+      <div class="mono-tag">FIELD TELEMETRY — TOKYO · MT. FUJI · NIKKO · UTSUNOMIYA</div>
+      <h1>SEE EVERY STOP OF YOUR 7-DAY EXPEDITION</h1>
+    </div>
+    <div class="hero-caption-right">
+      <p>結合 Claude 工程藍圖網格與瑞士極簡排版：從 12/11 淺草入住與墨田區大人系 Bistro 慶生、12/13 富士山 17K 環湖決戰，一路延伸至 12/15–12/17 日光東照宮、宇都宮大谷地下神殿與三批分流回國的終極數位手冊。</p>
+      <div class="mono-tag" style="color:var(--red);">SCROLL OR CLICK ANY MODULE TO INSPECT →</div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. 日本赤日幾何區 + 4 欄式數據儀表板 (Technique #2 & #3) ==================== -->
+  <section class="sun-split-section">
+    <div class="sun-art-box">
+      <div class="rising-sun"></div>
+      <svg width="320" height="280" viewBox="0 0 320 280" style="position:relative; z-index:2;">
+        <g stroke="#121212" stroke-width="1.5" fill="none">
+          <polygon points="160,30 60,260 260,260"/>
+          <line x1="160" y1="30" x2="160" y2="260"/>
+          <line x1="110" y1="145" x2="210" y2="145"/>
+          <line x1="85" y1="200" x2="235" y2="200"/>
+          <line x1="110" y1="145" x2="235" y2="200"/>
+          <line x1="210" y1="145" x2="85" y2="200"/>
+        </g>
+      </svg>
+    </div>
+    <div class="sun-copy-box">
+      <div class="mono-tag"><span class="red-dot"></span>MISSION OVERVIEW / 2026.12.11 — 12.17</div>
+      <h2>ONE UNIFIED BLUEPRINT FOR BIRTHDAY, MARATHON &amp; TOCHIGI ROAD TRIP.</h2>
+      <p style="font-size:14px; color:var(--sub);">
+        告別雜亂的備忘錄！我們將「先遣慶生組」、「高中好友團」與「日光宇都宮自駕延伸組」全部整合進單一工程級時間軸，確保凌晨 04:00 起跑接駁與三批機場報到零失誤。
+      </p>
+      <div>
+        <a href="#chronology" class="action-btn">OPEN 7-DAY COMMAND CONSOLE ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="mono-tag">TOTAL DURATION</div>
+      <div class="kpi-num">07<small>DAYS (12/11–17)</small></div>
+      <div class="mono-tag">淺草 ➔ 中野 ➔ 河口湖 ➔ 日光宇都宮</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="mono-tag">RACE DISTANCE</div>
+      <div class="kpi-num">17.0<small>KM LAKE LOOP</small></div>
+      <div class="mono-tag">12/13 04:20 計程車 ➔ 09:00 起跑</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="mono-tag">ROAD TRIP SPAN</div>
+      <div class="kpi-num">320<small>KM DRIVEN</small></div>
+      <div class="mono-tag">河口湖甲租乙還 ＋ 日光宇都宮雪胎自駕</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="mono-tag">RETURN FLIGHTS</div>
+      <div class="kpi-num">03<small>DEPARTURES</small></div>
+      <div class="mono-tag">12/15 BR107 · 12/16 新幹線 · 12/17 IT281</div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. 三欄式 01~07 行程切換中心 (Technique #5) ==================== -->
+  <div class="section-title-bar" id="chronology">
+    <div>
+      <div class="mono-tag">01 / INTERACTIVE CHRONOLOGY</div>
+      <h2>FROM TOKYO ARRIVAL TO NARITA DEPARTURE IN SEVEN STEPS</h2>
+    </div>
+    <div class="mono-tag" style="text-align:right;">CLICK LEFT STEP (01–07) TO SWITCH TIMELINE &amp; TACTICAL SPEC</div>
+  </div>
+
+  <section class="tri-stage">
+    <!-- 左欄：01~07 步驟切換 -->
+    <div class="tri-nav">
+      <button class="tri-tab active" onclick="selectDay(0, this)"><span><i class="dot-ind"></i>DAY 01 · 淺草與墨田慶生</span><span>12/11</span></button>
+      <button class="tri-tab" onclick="selectDay(1, this)"><span><i class="dot-ind"></i>DAY 02 · 好友會合與中野</span><span>12/12</span></button>
+      <button class="tri-tab" onclick="selectDay(2, this)"><span><i class="dot-ind"></i>DAY 03 · 富士山 17K 決戰</span><span>12/13</span></button>
+      <button class="tri-tab" onclick="selectDay(3, this)"><span><i class="dot-ind"></i>DAY 04 · 還車與東京拉麵</span><span>12/14</span></button>
+      <button class="tri-tab" onclick="selectDay(4, this)"><span><i class="dot-ind"></i>DAY 05 · 日光東照宮自駕</span><span>12/15</span></button>
+      <button class="tri-tab" onclick="selectDay(5, this)"><span><i class="dot-ind"></i>DAY 06 · 宇都宮地下神殿</span><span>12/16</span></button>
+      <button class="tri-tab" onclick="selectDay(6, this)"><span><i class="dot-ind"></i>DAY 07 · 圈央道直奔虎航</span><span>12/17</span></button>
+    </div>
+
+    <!-- 中欄：黑底高反差時間軸面板 -->
+    <div class="tri-visual">
+      <div>
+        <div class="mono-tag" style="color:#ffcf5a;" id="mid-header">LIVE SCHEDULE // DAY 01 · FRI 12.11</div>
+        <div class="tri-timeline-list" id="mid-timeline"></div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:12px; display:flex; justify-content:space-between;" class="mono-tag">
+        <span id="mid-footer-left">BASE: NO SERVICE HOTEL ASAKUSA</span>
+        <span style="color:#7dffa8;">STATUS: CONFIRMED</span>
+      </div>
+    </div>
+
+    <!-- 右欄：巨大空心數字 01~07 + 戰術提醒 -->
+    <div class="tri-detail">
+      <div>
+        <div class="outline-num" id="right-num">01</div>
+        <h3 id="right-title">淺草無人旅宿入住 &amp; 墨田區大人系慶生</h3>
+        <p id="right-desc">先遣慶生組抵達東京！入住淺草老宅翻修無電梯旅宿，晚間前往墨田區（押上/錦糸町）享用自然派葡萄酒與法式 Bistro 慶生大餐。</p>
+        <div class="red-tags" id="right-tags">
+          <span class="red-tag">CHECK-IN 15:00</span>
+          <span class="red-tag">NO ELEVATOR</span>
+          <span class="red-tag">BIRTHDAY PLATE</span>
+        </div>
+      </div>
+      <div id="right-action-area">
+        <button class="action-btn" onclick="copyLockEmail(this)">📋 一鍵複製 No Service Hotel 索取密碼英文信</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. 六宮格工程線條 Bento 工具卡 (Technique #6) ==================== -->
+  <div class="section-title-bar" id="bento-tools">
+    <div>
+      <div class="mono-tag">02 / SIX TACTICAL MODULES</div>
+      <h2>SIX FIELD TOOLS FOR ZERO-FRICTION TRAVEL</h2>
+    </div>
+    <div class="mono-tag" style="text-align:right;">TECHNICAL DIAGRAMS &amp; CRITICAL PROTOCOLS</div>
+  </div>
+
+  <section class="bento-6-grid">
+    <div class="bento-cell">
+      <div class="mono-tag">/ 01 · SMART LOCK PROTOCOL</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <line x1="20" y1="40" x2="240" y2="40" stroke="#121212" stroke-width="1.2" stroke-dasharray="4 4"/>
+        <circle cx="70" cy="40" r="6" fill="#121212"/>
+        <circle cx="190" cy="40" r="7" fill="#e63329"/>
+        <text x="50" y="25" font-family="monospace" font-size="10">T-48 HRS EMAIL</text>
+        <text x="160" y="25" font-family="monospace" font-size="10" fill="#e63329">15:00 UNLOCK</text>
+      </svg>
+      <div>
+        <h4>NO SERVICE HOTEL 防卡門機制</h4>
+        <p>退房 10:00 前、無電梯。提早到先寄放田原町站置物櫃，務必於入住前 2 天發信索取電子鎖密碼。</p>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <div class="mono-tag">/ 02 · RACE DAY 04:00 AM HUD</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <polyline points="15,65 70,55 125,40 180,25 240,15" fill="none" stroke="#121212" stroke-width="1.5"/>
+        <circle cx="15" cy="65" r="4" fill="#121212"/>
+        <circle cx="125" cy="40" r="4" fill="#121212"/>
+        <circle cx="240" cy="15" r="6" fill="#e63329"/>
+        <text x="185" y="38" font-family="monospace" font-size="10" fill="#e63329">09:00 START</text>
+      </svg>
+      <div>
+        <h4>12/13 凌晨接駁與防失溫</h4>
+        <p>04:00 早餐 ➔ 04:20 計程車 ➔ 04:35 新宿西口 ➔ 05:00 巴士發車（車上領物資）。河口湖清晨 -2°C 必備手套毛帽。</p>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <div class="mono-tag">/ 03 · FUJI ONE-WAY RENTAL</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <path d="M20,60 Q130,10 240,60" fill="none" stroke="#121212" stroke-width="1.5"/>
+        <circle cx="20" cy="60" r="5" fill="#121212"/>
+        <circle cx="130" cy="35" r="5" fill="#e63329"/>
+        <circle cx="240" cy="60" r="5" fill="#121212"/>
+        <text x="95" y="22" font-family="monospace" font-size="10" fill="#e63329">GOTEMBA 19:00</text>
+      </svg>
+      <div>
+        <h4>河口湖取車 ➔ 中野坂上還車</h4>
+        <p>12/13 14:00 河口湖取車遊忍野八海、御殿場 Outlet（冬季 19:00 打烊）與焼肉よしのNEXT；隔日 09:00 前加滿油還車。</p>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <div class="mono-tag">/ 04 · NIKKO PARK &amp; RIDE</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <line x1="20" y1="60" x2="120" y2="60" stroke="#121212" stroke-width="2"/>
+        <line x1="120" y1="60" x2="230" y2="20" stroke="#e63329" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="120" cy="60" r="6" fill="#e63329"/>
+        <text x="85" y="75" font-family="monospace" font-size="10">TOBU NIKKO P</text>
+        <text x="165" y="18" font-family="monospace" font-size="10" fill="#e63329">BUS 2B (8m)</text>
+      </svg>
+      <div>
+        <h4>日光東照宮安全停車轉乘</h4>
+        <p>12/15 新宿租車必配雪胎。車停平地「東武日光站」吃湯波午餐，轉乘 2B 站牌世界遺產巴士上山（東照宮 15:30 停售票）。</p>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <div class="mono-tag">/ 05 · OYA UNDERGROUND MUSEUM</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <rect x="40" y="20" width="180" height="45" fill="none" stroke="#121212" stroke-width="1.2"/>
+        <line x1="85" y1="20" x2="85" y2="65" stroke="#121212"/>
+        <line x1="130" y1="20" x2="130" y2="65" stroke="#121212"/>
+        <line x1="175" y1="20" x2="175" y2="65" stroke="#121212"/>
+        <circle cx="130" cy="42" r="5" fill="#e63329"/>
+      </svg>
+      <div>
+        <h4>宇都宮連住兩晚 ＆ 大谷地下神殿</h4>
+        <p>12/15 晚餐「來らっせ 本店」一次吃五大名店煎餃；12/16 (週三) 解鎖地下 30m 大谷資料館（避開週二公休）與 LRT 輕軌。</p>
+      </div>
+    </div>
+
+    <div class="bento-cell">
+      <div class="mono-tag">/ 06 · 3-WAVE AIRPORT DISPATCH</div>
+      <svg class="bento-svg" viewBox="0 0 260 80">
+        <line x1="20" y1="25" x2="220" y2="25" stroke="#121212"/>
+        <line x1="20" y1="45" x2="220" y2="45" stroke="#121212"/>
+        <line x1="20" y1="65" x2="220" y2="65" stroke="#e63329" stroke-width="1.5"/>
+        <circle cx="220" cy="65" r="5" fill="#e63329"/>
+      </svg>
+      <div>
+        <h4>三批回國精準送機雷達</h4>
+        <p>12/15 BR107 (08:45 出發)；12/16 12:25 班機 (08:22 宇都宮新幹線+Skyliner)；12/17 虎航 IT281 (08:00 圈央道直放 T2)。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. 全螢幕互動跨縣市路網雷達 (Technique #7) ==================== -->
+  <div class="section-title-bar" id="live-map">
+    <div>
+      <div class="mono-tag">03 / LIVE CORRIDOR TELEMETRY</div>
+      <h2>EVERY SPAN OF YOUR ROUTE, ON ONE LIVE RADAR</h2>
+    </div>
+    <div class="mono-tag" style="text-align:right;">CLICK LEFT ROUTE SPAN TO INSPECT DISTANCE &amp; CUTOFF</div>
+  </div>
+
+  <section class="live-map-box">
+    <div class="span-sidebar">
+      <div class="span-item active" onclick="selectSpan(0, this)">
+        <span>SPAN 01 · 新宿 ➔ 河口湖 17K</span>
+        <span class="span-badge">05:00 BUS</span>
+      </div>
+      <div class="span-item" onclick="selectSpan(1, this)">
+        <span>SPAN 02 · 河口湖 ➔ 御殿場 ➔ 中野</span>
+        <span class="span-badge">TOYOTA 1-WAY</span>
+      </div>
+      <div class="span-item" onclick="selectSpan(2, this)">
+        <span>SPAN 03 · 新宿 ➔ 日光東照宮 ➔ 宇都宮</span>
+        <span class="span-badge">STUDLESS</span>
+      </div>
+      <div class="span-item" onclick="selectSpan(3, this)">
+        <span>SPAN 04 · 宇都宮 ➔ 上野 ➔ 成田 (12/16)</span>
+        <span class="span-badge">08:22 🚅</span>
+      </div>
+      <div class="span-item" onclick="selectSpan(4, this)">
+        <span>SPAN 05 · 宇都宮 ➔ 圈央道 ➔ 成田 T2</span>
+        <span class="span-badge">NO DROP-OFF</span>
+      </div>
+    </div>
+
+    <div class="span-canvas">
+      <!-- 斜向紅色雷射路徑線 -->
+      <svg width="100%" height="100%" viewBox="0 0 800 400" style="position:absolute; inset:0;">
+        <line x1="80" y1="340" x2="720" y2="60" stroke="#e63329" stroke-width="2" stroke-dasharray="6 4"/>
+        <circle cx="240" cy="270" r="6" fill="#e63329"/>
+        <circle cx="450" cy="178" r="8" fill="#ffcf5a"/>
+        <circle cx="640" cy="95" r="6" fill="#e63329"/>
+      </svg>
+
+      <div class="floating-span-card">
+        <div class="mono-tag" style="color:#ffcf5a;" id="sp-code">SPAN 01 // SHINJUKU → KAWAGUCHIKO</div>
+        <div class="big-metric" id="sp-metric">115 KM · 04:20 AM TAXI</div>
+        <p style="font-size:13px; color:#d6d5d0; margin:8px 0 14px;" id="sp-desc">
+          12/13 凌晨 04:00 起床吃早餐，04:20 從中野搭預約計程車至新宿西口，05:00 官方接駁巴士準時發車（車上發放號碼布與晶片），09:00 河口湖 17K 起跑！
+        </p>
+        <div class="mono-tag" style="color:#7dffa8;" id="sp-alert">✓ TRANSPORTATION ONLY PACKAGE (¥22,000)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 8. 墨田慶生 Bistro & 名店「反黑矩陣」(Technique #8) ==================== -->
+  <section class="invert-matrix-section" id="bistro-matrix">
+    <div class="matrix-left">
+      <div class="mono-tag">04 / GASTRONOMY &amp; BIRTHDAY MATRIX</div>
+      <h3 style="font-size:26px; font-weight:600; margin:10px 0 12px;">MAISON CINQUANTECINQ 風格慶生餐酒館 ＆ 必吃名店</h3>
+      <p style="font-size:13.5px; color:var(--sub); margin-bottom:18px;">
+        點擊右側任一餐廳方格（游標經過自動反黑高亮），即可直接開啟 Google Maps 導航。12/11 慶生訂位別忘了在 TableCheck 備註 <strong>Birthday Dessert Plate</strong>！
+      </p>
+      <div class="red-tags">
+        <span class="red-tag">NATURAL WINE</span>
+        <span class="red-tag">SUMIDA BISTRO</span>
+        <span class="red-tag">UTSUNOMIYA GYOZA</span>
+      </div>
+    </div>
+
+    <div class="matrix-grid">
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=遠藤利三郎商店+押上" target="_blank">
+        <div class="mono-tag">01 · OSHIAGE BISTRO (¥7,000–9,000)</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">遠藤利三郎商店（押上本店）↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">滿牆千瓶酒窖、油封鴨腿與黑毛和牛，墨田區最傳奇大人感酒館。</p>
+        </div>
+      </a>
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=大人洋食+Bistro1996+錦糸町" target="_blank">
+        <div class="mono-tag">02 · KINSHICHO BISTRO (¥5,500–7,500)</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">大人洋食 Bistro1996, ↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">磚石深木質調、五星主廚法式創意料理配自然酒，最像 MAISON 55！</p>
+        </div>
+      </a>
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=とーかんまんしょん錦糸町+101号室" target="_blank">
+        <div class="mono-tag">03 · HIDDEN GEM (¥5,000–7,000)</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">とーかんまんしょん錦糸町 101号室 ↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">老宅 1F 真正隱密系餐酒館，精準低溫慢熟肉料理配自然派橘酒。</p>
+        </div>
+      </a>
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=Etape+本所吾妻橋" target="_blank">
+        <div class="mono-tag">04 · RIVERSIDE FRENCH (¥7,000–9,000)</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">Étape（本所吾妻橋）↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">離淺草最近！隅田川畔一軒家 Modern French Bistro 小皿料理。</p>
+        </div>
+      </a>
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=らぁ麺や+嶋+西新宿五丁目" target="_blank">
+        <div class="mono-tag">05 · DAY 4 TOKYO RAMEN</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">らぁ麺や 嶋 ＆ THOUSAND COFFEE ↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">12/14 中野坂上還車後順路現場記帳，東京拉麵百名店巔峰。</p>
+        </div>
+      </a>
+      <a class="matrix-tile" href="https://www.google.com/maps/search/?api=1&query=来らっせ+本店+宇都宮" target="_blank">
+        <div class="mono-tag">06 · DAY 5 UTSUNOMIYA GYOZA</div>
+        <div>
+          <h4 style="font-size:16px; font-weight:700;">來らっせ (Kirasse) 本店 ↗</h4>
+          <p style="font-size:12.5px; opacity:0.8;">宇都宮 MEGA 唐吉訶德 B1，免吹冷風一次吃遍みんみん、正嗣五大名店！</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== 9. 單邊紅塊手風琴 FAQ 與檢核 (Technique #9) ==================== -->
+  <section class="faq-section" id="faq-check">
+    <div class="faq-left">
+      <div class="mono-tag">05 / BRIEFING &amp; CONTINGENCY</div>
+      <h2 style="font-size:32px; font-weight:600; margin:8px 0 12px;">QUESTIONS, ANSWERED.</h2>
+      <p style="font-size:13.5px; color:var(--sub);">
+        點擊右側展開行前最關鍵的防卡門、雪地自駕、火山應變與三批機場關櫃死線。
+      </p>
+    </div>
+
+    <div>
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>01 / NO SERVICE HOTEL 提早到沒收到門鎖密碼怎麼辦？</span>
+          <span class="faq-btn-box">−</span>
+        </button>
+        <div class="faq-a">
+          無人旅宿通常在 15:00 前夕才自動派發密碼。請務必提前幾天完成 Online Pre-check-in，並在入住前 24–48 小時發英文信主動索取大門與房門密碼。若中午前抵達，大件行李請先寄放田原町站或淺草站 Coin Locker。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>02 / 12/15–12/17 去日光東照宮與宇都宮會下雪嗎？自駕安全嗎？</span>
+          <span class="faq-btn-box">+</span>
+        </button>
+        <div class="faq-a">
+          12 月中旬日光山麓（海拔 600m）氣溫約 -2°C～6°C，降雪機率約 30%–40%，且清晨背陰處極易有「黑冰（暗冰）」。新宿租車時<strong>務必加選雪胎（Studless Tires）與 ETC 卡</strong>；抵達日光建議停在平地「東武日光站」再搭 2B 世界遺產巡遊巴士上山（Park &amp; Ride），安全又免找車位！
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>03 / 12/15、12/16、12/17 三批人馬回高雄的機場報到死線？</span>
+          <span class="faq-btn-box">+</span>
+        </button>
+        <div class="faq-a">
+          • <strong>12/15 (二) 長榮 BR107 (12:45 起飛)</strong>：請於 08:45–09:00 從中野出發，10:15 抵達成田 T1。<br>
+          • <strong>12/16 (三) 12:25 班機朋友</strong>：08:22 於 JR 宇都宮站搭東北新幹線（山彥 52 號）➔ 09:06 上野轉 Skyliner ➔ 10:03 抵達成田機場。<br>
+          • <strong>12/17 (四) 台灣虎航 IT281 (13:00 起飛，12:15 準時關櫃)</strong>：08:00 宇都宮開車走「北關東道＋常磐道＋圈央道」避開東京塞車，10:15 直達成田 T2 3F 出境大廳放人下車（司機當天不回國免趕還車！）。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>04 / 萬一跑河口湖馬拉松遇到富士山火山爆發怎麼辦？</span>
+          <span class="faq-btn-box">+</span>
+        </button>
+        <div class="faq-a">
+          完全不是必死無疑！河口湖距離火山口約 15–20 公里，熔岩流速度比慢跑還慢，且日本氣象廳 24 小時嚴密監控前兆。真正要注意的是清晨 -2°C 湖風造成的失溫風險，請備妥防風外套、手套與毛帽！
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 10. 頁尾超大空心字 Hover 逐字變紅 (Technique #10) ==================== -->
+  <footer class="stencil-footer">
+    <div class="mono-tag" style="margin-bottom:14px;">HOVER OR SWIPE ACROSS LETTERS · BUILT WITH ARBORLINE BLUEPRINT TECHNIQUES</div>
+    <div class="giant-word" id="stencil-word">
+      <span>F</span><span>U</span><span>J</span><span>I</span><span>·</span><span>2</span><span>0</span><span>2</span><span>6</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  /* 技巧 #5：三欄式 01~07 行程資料與切換引擎 */
+  const DAYS_DATA = [
+    {
+      num: "01",
+      header: "LIVE SCHEDULE // DAY 01 · FRI 12.11",
+      base: "BASE: NO SERVICE HOTEL ASAKUSA",
+      title: "淺草無人旅宿入住 & 墨田區大人系 Bistro 慶生",
+      desc: "先遣慶生組抵達東京！15:00 入住淺草老宅旅宿（無電梯、10:00 退房），晚間於墨田區享用自然派葡萄酒與法式私廚料理慶生。",
+      tags: ["CHECK-IN 15:00", "NO ELEVATOR", "SUMIDA BISTRO"],
+      rows: [
+        { t: "15:00–23:00", h: "NO SERVICE HOTEL asakusa 入住", p: "台東区浅草 1-8-4 · 提早到先寄放田原町站置物櫃", map: "https://www.google.com/maps/search/?api=1&query=NO+SERVICE+HOTEL+asakusa" },
+        { t: "18:30–21:30", h: "墨田區大人系 Bistro 慶生晚餐 (5選1)", p: "遠藤利三郎商店 / Bistro1996, / 101号室 / Étape / Jitan", map: "https://www.google.com/maps/search/?api=1&query=遠藤利三郎商店+押上" }
+      ]
+    },
+    {
+      num: "02",
+      header: "LIVE SCHEDULE // DAY 02 · SAT 12.12",
+      base: "BASE: TANY'S HOUSE NAKANO-YAYOICHO",
+      title: "高中好友團 BR108 飛抵東京 & 中野基地全員會合",
+      desc: "好友團搭乘長榮 BR108 (07:00 KHH → 11:25 NRT T1) 抵達。16:00 全員入住中野基地，晚間採買隔日 04:00 早餐並預約 04:20 計程車。",
+      tags: ["BR108 11:25 NRT", "NAKANO BASE", "04:20 TAXI BOOKING"],
+      rows: [
+        { t: "07:00→11:25", h: "長榮航空 BR108 (高雄 → 成田 T1)", p: "好友團抵達東京，搭 Skyliner / N'EX 進市區", map: "https://www.google.com/maps/search/?api=1&query=Narita+Airport+Terminal+1" },
+        { t: "16:00 IN", h: "入住中野 Tany’s House Stay&HOTEL", p: "中野区弥生町 1-54-16 (中野新橋站步行 7 分鐘)", map: "https://www.google.com/maps/search/?api=1&query=Tany%27s+House+Stay+HOTEL+TOKYO-NAKANO-YAYOICHO" }
+      ]
+    },
+    {
+      num: "03",
+      header: "LIVE SCHEDULE // DAY 03 · SUN 12.13 (RACE DAY)",
+      base: "BASE: KAWAGUCHIKO 17K → NAKANO",
+      title: "🗻 富士山環湖 17K 馬拉松決戰 & 河口湖・御殿場自駕",
+      desc: "04:00 早餐 ➔ 04:20 計程車 ➔ 04:35 新宿西口集合 ➔ 05:00 接駁車發車（車上領物資）➔ 09:00 起跑！午後河口湖取車自駕遊忍野八海與御殿場。",
+      tags: ["04:00 WAKE UP", "09:00 17K START", "GOTEMBA 19:00 CLOSE"],
+      rows: [
+        { t: "04:00–09:00", h: "新宿西口官方接駁巴士 ➔ 河口湖 17K 起跑", p: "清晨 -2°C 極凍，起跑前必穿防風衣、手套與毛帽", map: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Herb+Hall" },
+        { t: "14:00–20:00", h: "河口湖 Toyota 取車 ➔ 忍野八海 ➔ 御殿場 & 焼肉よしのNEXT", p: "御殿場冬季 19:00 打烊，完賽燒肉慶功後開回中野", map: "https://www.google.com/maps/search/?api=1&query=焼肉よしのNEXT+御殿場市ぐみ沢36-5" }
+      ]
+    },
+    {
+      num: "04",
+      header: "LIVE SCHEDULE // DAY 04 · MON 12.14",
+      base: "BASE: TANY'S HOUSE NAKANO",
+      title: "中野坂上異地還車 × 神級拉麵「らぁ麺や 嶋」巡禮",
+      desc: "08:45 於 Toyota 中野坂上店加滿油還車，順路去西新宿五丁目登記東京拉麵百名店「らぁ麺や 嶋」，午後享用手作蛋糕捲與新宿澀谷街區散步。",
+      tags: ["09:00 RETURN CAR", "RAMEN SHIMA", "THOUSAND COFFEE"],
+      rows: [
+        { t: "08:45–09:00", h: "Toyota Rent a Car 中野坂上店還車", p: "還車前加滿紅油 (Regular) 並保留收據結算 ETC", map: "https://www.google.com/maps/search/?api=1&query=Toyota+Rent+a+Car+Nakano+Sakaue" },
+        { t: "11:30–16:30", h: "らぁ麺や 嶋 ＆ THOUSAND COFFEE", p: "西新宿五丁目拉麵名店記帳制 ＋ 季節奶油捲咖啡廳", map: "https://www.google.com/maps/search/?api=1&query=らぁ麺や+嶋+西新宿五丁目" }
+      ]
+    },
+    {
+      num: "05",
+      header: "LIVE SCHEDULE // DAY 05 · TUE 12.15 (SPLIT DAY)",
+      base: "BASE: JR UTSUNOMIYA STATION HOTEL",
+      title: "雙軌分流：第一批 BR107 回國 ⇄ 續留組自駕往日光東照宮＆宇都宮",
+      desc: "先回國成員 08:45 出發往成田 T1 搭 12:45 BR107；續留組 09:00 新宿取車(配雪胎)直奔東武日光站 Park & Ride 轉公車上東照宮，晚上住宇都宮吃煎餃！",
+      tags: ["BR107 12:45", "NIKKO TOSHOGU 15:30", "KIRASSE GYOZA"],
+      rows: [
+        { t: "08:45→12:45", h: "[分流 A] 前往成田 T1 搭乘長榮 BR107 回高雄", p: "務必於 10:15–10:30 抵達機場櫃檯，避開原 10:57 緊繃時段", map: "https://www.google.com/maps/search/?api=1&query=Narita+Airport+Terminal+1" },
+        { t: "09:00–20:30", h: "[分流 B] 新宿自駕 ➔ 東武日光站轉公車上東照宮 ➔ 住宇都宮", p: "東照宮 15:30 停售票；晚餐 MEGA 唐吉訶德 B1 來らっせ煎餃", map: "https://www.google.com/maps/search/?api=1&query=Nikko+Toshogu" }
+      ]
+    },
+    {
+      num: "06",
+      header: "LIVE SCHEDULE // DAY 06 · WED 12.16",
+      base: "BASE: JR UTSUNOMIYA STATION (NIGHT 2)",
+      title: "12/16 朋友新幹線送機 ⇄ 宇都宮地下神殿「大谷資料館」巡禮",
+      desc: "搭 12:25 班機的朋友於 08:22 搭東北新幹線轉 Skyliner 準時於 10:03 抵達成田；自駕組深入地下 30m 大谷資料館（避開週二公休）與體驗宇都宮 LRT 輕軌。",
+      tags: ["08:22 SHINKANSEN", "OYA UNDERGROUND", "UTSUNOMIYA LRT"],
+      rows: [
+        { t: "08:22→10:03", h: "[12/16 回國朋友] 宇都宮東北新幹線 ➔ 上野轉 Skyliner", p: "山彥 52 號 09:06 抵上野，轉 09:20 Skyliner 直達成田機場", map: "https://www.google.com/maps/search/?api=1&query=JR+Utsunomiya+Station" },
+        { t: "09:30–17:30", h: "大谷資料館 (地下神殿) ➔ 大谷寺和平觀音 ➔ 二荒山神社 & LRT", p: "開車 20 分鐘即達地下採石場奇景，續住宇都宮免搬行李", map: "https://www.google.com/maps/search/?api=1&query=Oya+History+Museum" }
+      ]
+    },
+    {
+      num: "07",
+      header: "LIVE SCHEDULE // DAY 07 · THU 12.17",
+      base: "FINAL DESTINATION: NARITA T2 → KHH",
+      title: "宇都宮外環高速直奔成田 T2（免還車直放）➔ 台灣虎航 IT281 返高雄",
+      desc: "08:00 宇都宮出發走「北關東道＋常磐道＋圈央道」完全避開東京塞車！司機當天不回國免趕還車，10:15 直接開到成田 T2 出境大廳放人下車，搭 13:00 虎航返台。",
+      tags: ["08:00 DEPART", "BYPASS TOKYO TRAFFIC", "IT281 CUTOFF 12:15"],
+      rows: [
+        { t: "08:00–10:15", h: "宇都宮上三川 IC ➔ 北關東道/圈央道 ➔ 成田 T2 3F 大廳", p: "全程 150km 約 1h55m，司機放大家下車後即可直接開走", map: "https://www.google.com/maps/search/?api=1&query=Narita+Airport+Terminal+2" },
+        { t: "10:30–13:00", h: "台灣虎航 IT281 報到托運 (12:15 準時關櫃！)", p: "13:00 成田 T2 起飛返回高雄小港 (KHH)", map: "https://www.google.com/maps/search/?api=1&query=Narita+Airport+Terminal+2" }
+      ]
+    }
+  ];
+
+  function selectDay(idx, btn) {
+    document.querySelectorAll('.tri-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const d = DAYS_DATA[idx];
+    document.getElementById('mid-header').innerText = d.header;
+    document.getElementById('mid-footer-left').innerText = d.base;
+    document.getElementById('right-num').innerText = d.num;
+    document.getElementById('right-title').innerText = d.title;
+    document.getElementById('right-desc').innerText = d.desc;
+    document.getElementById('right-tags').innerHTML = d.tags.map(t => `<span class="red-tag">${t}</span>`).join('');
+    document.getElementById('mid-timeline').innerHTML = d.rows.map(r => `
+      <div class="tl-row">
+        <div>
+          <div class="tl-time">${r.t}</div>
+          <div class="tl-body"><h4>${r.h}</h4><p>${r.p}</p></div>
+        </div>
+        <a class="tl-map" href="${r.map}" target="_blank">MAP ↗</a>
+      </div>
+    `).join('');
+  }
+  selectDay(0, document.querySelector('.tri-tab'));
+
+  function copyLockEmail(btn) {
+    const msg = "Hello, our reservation number is [填入訂單編號]. We plan to arrive around 15:00 on Dec 11. Could you please send us the door lock code and check-in instructions in advance? Thank you!";
+    navigator.clipboard.writeText(msg).then(() => {
+      const old = btn.innerText;
+      btn.innerText = "✓ 已複製英文信至剪貼簿！";
+      setTimeout(() => btn.innerText = old, 2200);
+    });
+  }
+
+  /* 技巧 #7：即時路網雷達切換 */
+  const SPANS = [
+    { code: "SPAN 01 // SHINJUKU → KAWAGUCHIKO", metric: "115 KM · 04:20 AM TAXI", desc: "12/13 凌晨 04:00 起床吃早餐，04:20 從中野搭預約計程車至新宿西口，05:00 官方接駁巴士準時發車（車上發放號碼布與晶片），09:00 河口湖 17K 起跑！", alert: "✓ TRANSPORTATION ONLY PACKAGE (¥22,000)" },
+    { code: "SPAN 02 // KAWAGUCHIKO → GOTEMBA → NAKANO", metric: "135 KM · ONE-WAY RENTAL", desc: "12/13 14:00 河口湖 Toyota 取車 ➔ 14:45 忍野八海 ➔ 16:40 御殿場 Outlet (冬季 19:00 打烊) 與焼肉よしのNEXT ➔ 返回中野，隔日 09:00 前中野坂上店還車。", alert: "✓ 還車前務必加滿紅油 (Regular) 並保留收據" },
+    { code: "SPAN 03 // SHINJUKU → NIKKO → UTSUNOMIYA", metric: "165 KM · STUDLESS TIRES", desc: "12/15 09:00 新宿取車走東北道直奔東武日光站停車，轉乘 2B 巴士上東照宮（15:30 停售票），16:00 開往宇都宮站前飯店連住兩晚。", alert: "⚠️ 12 月日光山麓易有黑冰，必配雪胎與 ETC" },
+    { code: "SPAN 04 // UTSUNOMIYA → UENO → NARITA (12/16)", metric: "08:22 🚅 → 10:03 NRT", desc: "12/16 搭 12:25 班機回國的朋友：08:22 JR 宇都宮搭東北新幹線（山彥 52 號）➔ 09:06 抵上野站 ➔ 轉乘 09:20 或 09:40 京成 Skyliner ➔ 10:03 抵達成田機場！", alert: "✓ 全程對號座，時間充裕零塞車風險" },
+    { code: "SPAN 05 // UTSUNOMIYA → KEN-O EXPWY → NARITA T2", metric: "150 KM · 1 HR 55 MIN", desc: "12/17 08:00 宇都宮出發走「北關東道＋常磐道＋圈央道」茨城外環，完全避開東京都心通勤大塞車！10:15 直接開到成田 T2 3F 出境大廳放人下車。", alert: "✓ 司機當天不回國免趕加油還車・虎航 12:15 關櫃" }
+  ];
+  function selectSpan(idx, el) {
+    document.querySelectorAll('.span-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    const s = SPANS[idx];
+    document.getElementById('sp-code').innerText = s.code;
+    document.getElementById('sp-metric').innerText = s.metric;
+    document.getElementById('sp-desc').innerText = s.desc;
+    document.getElementById('sp-alert').innerText = s.alert;
+  }
+
+  /* 技巧 #9：單邊紅塊手風琴 */
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-btn-box').innerText = '+';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.querySelector('.faq-btn-box').innerText = '−';
+    }
+  }
+
+  /* 技巧 #10：頁尾空心字手指滑動點亮特效 */
+  const letters = document.querySelectorAll('#stencil-word span');
+  letters.forEach((span, i) => {
+    span.addEventListener('mouseenter', () => {
+      span.classList.add('lit');
+      setTimeout(() => span.classList.remove('lit'), 650);
+    });
+  });
+</script>
+</body>
+</html>
